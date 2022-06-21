@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(${PROJECT_NAME} LANGUAGES CXX CUDA)
 
-include_directories (.)
+include_directories (include)
 
 # configure_file( Version.h.in ${CMAKE_SOURCE_DIR}/sample/Version.h )
 
@@ -15,26 +15,30 @@ IF(STATIC)
 ENDIF()
 
 					
-add_executable(${PROJECT_NAME}
+add_executable(main_executable_name
 				main.cpp
-                kernel.cu
-                otherfile.cpp)	
+                )	
 					
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
+add_executable(cuda_executable_name
+                main_cuda.cu
+                add.cu
+                )	
 
-set_target_properties( ${PROJECT_NAME}
+target_compile_features(main_executable_name PUBLIC cxx_std_11)
+target_compile_features(cuda_executable_name PUBLIC cxx_std_11)
+
+
+set_target_properties(cuda_executable_name
                        PROPERTIES CUDA_SEPARABLE_COMPILATION ON
                       )
-# SET_TARGET_PROPERTIES(sampleconvexalign PROPERTIES COMPILE_FLAGS " -g -O3 -shared-libgcc")
-# SET_TARGET_PROPERTIES(sampleconvexalign PROPERTIES LINK_FLAGS " -g -O3 -shared-libgcc")
 
-## these don't work...
-# add_compile_options("$<$<CONFIG:RELEASE>: -W -Wall -O3 -pg -pedantic>")
-# add_compile_options("$<$<CONFIG:DEBUG>: -W -Wall -O0 -pg -g -pedantic>")
+target_compile_options(cuda_executable_name PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
+            -G
+            >)
+target_compile_options(main_executable_name PRIVATE $<$<COMPILE_LANGUAGE:CXX>:
+            -g
+            >)
 
-# TARGET_LINK_LIBRARIES(sampleconvexalign ${ZLIB_LIBRARIES})
-# TARGET_LINK_LIBRARIES(sampleconvexalign ${CMAKE_THREAD_LIBS_INIT})
-# TARGET_LINK_LIBRARIES(sampleconvexalign ${LIBRARY_OUTPUT_PATH}/libconvexalign.a)
-
-install (TARGETS ${PROJECT_NAME} DESTINATION bin)
+install (TARGETS cuda_executable_name DESTINATION bin)
+install (TARGETS main_executable_name DESTINATION bin)

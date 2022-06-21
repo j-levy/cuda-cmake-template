@@ -5,6 +5,3 @@ x86
 .vs
 build
 bin
-pssw_shfl/Debug
-pssw_shfl/Release
-pssw_shfl/x64

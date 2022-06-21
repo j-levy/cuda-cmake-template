@@ -1,13 +1,10 @@
-cmake_minimum_required(VERSION 3.8)
-
-# note: __shfl is deprecated. The non-sync definitions of warp shuffle functions ( __shfl, __shfl_up, __shfl_down, and __shfl_xor ) and warp vote functions (__any, __all, __ballot) have been removed when compilation is targeting devices with compute capability 7.x and higher.
-# for now I set architecture to 6.0 max.
+cmake_minimum_required(VERSION 3.10)
 
 if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
   set(CMAKE_CUDA_ARCHITECTURES 75)
 endif()
 
-project(PROJECTNAME LANGUAGES CXX CUDA)
+project(my_project_name LANGUAGES CXX CUDA)
 
 include(CheckCXXCompilerFlag)
 
